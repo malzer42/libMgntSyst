@@ -28,8 +28,8 @@ class Main
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             System.out.println(dtf.format(now));
-            // Process process = Runtime.getRuntime().exec(String.format("cls"));
-            // process.waitFor();
+            Process process = Runtime.getRuntime().exec(String.format("clear"));
+            process.waitFor();
             // Display the program message
             System.out.println("Library Management System (Lib_mgnt_sys)");
             System.out.println("If you fail to plan, you are planning to fail");
@@ -132,12 +132,12 @@ class Main
             
             System.out.println("// Adding Subscriber instances to the Library");
             for (Subscriber sub : subs) {
-                library.addSubscriber(sub);
+                library.getListSubs().add(sub); // addSubscriber(sub);
             }
             
             System.out.println("\n\n// Adding Book instances to the Library");
             for (Book book: books) {
-                library.addBook(book);
+                library.getListBooks().add(book); //addBook(book);
             }
             
             /**
