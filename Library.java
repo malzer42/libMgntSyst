@@ -4,114 +4,41 @@
  * and open the template in the editor.
  */
 package com.smart.tech;
+import java.util.ArrayList;
 
 /**
- *
+ * File: Library.java
  * @author pamulamba
  */
 public class Library {
     // Attributes or instances variables
-    private final int SIZE_SUBS = 100;
-    private final Subscriber[] listSubs;
-    private int nSubscribers;
-    
-    private final int SIZE_BOOKS = 1000;
-    private final Book[] listBooks;
-    private int nBooks;
-    
-    private final int SIZE_BORROWS = 200;
-    private final Borrow[] listBorrows;
-    private int nBorrows;
-    
+    private final ArrayList<Subscriber> listSubs;
+    private final ArrayList<Book> listBooks;
+    private final ArrayList<Borrow> listBorrows;
+      
     // Ctor    
     public Library(){
-        listSubs = new Subscriber[SIZE_SUBS];
-        listBooks = new Book[SIZE_BOOKS];
-        listBorrows = new Borrow[SIZE_BORROWS];
-        nSubscribers = 0;
-        nBooks = 0;
-        nBorrows = 0;
+        listSubs = new ArrayList<>();
+        listBooks = new ArrayList<>();
+        listBorrows = new ArrayList<>();
     }
     
-    /**
-     * Add an instance of Subscriber to the array of Subscribers
-     * @param subscriber 
-     */
-    public void addSubscriber(Subscriber subscriber){
-        if (nSubscribers < SIZE_SUBS) {
-            listSubs[nSubscribers++] = new Subscriber(subscriber);
-            subscriber.print();
-            System.out.println("Added " + nSubscribers + " Subscriber(s) Successfully to the library\n");
-        }        
+    
+    public ArrayList<Subscriber> getListSubs(){
+        return listSubs;
     }
     
-    /**
-     * Delete an instance of Subscriber based on the id_number of a Subscriber object
-     * @param id_number 
-     */
-    public void delSubscriber(String id_number){
-        for (int i = 0; i < nSubscribers; i++) {
-            if (listSubs[i].getIdNumber().equals(id_number)) {
-                listSubs[i] = listSubs[nSubscribers - 1];
-                nSubscribers--;
-                break;
-            }
-        }
+    public ArrayList<Book> getListBooks(){
+        return listBooks;
     }
     
-    /**
-     * Add an instance of Book to the array of Books
-     * @param book 
-     */
-    public void addBook(Book book){
-        if (nBooks < SIZE_BOOKS) {
-            listBooks[nBooks++] = new Book(book);
-            book.print();
-            System.out.println("Added " + nBooks + " Book(s) Successfully to the Library\n");
-        }       
+    public ArrayList<Borrow> getListBorrows(){
+        return listBorrows;
     }
     
-    /**
-     * Delete an instance of Books based on the quote of a Book object
-     * @param quote 
-     */
-    public void delBook(String quote){
-        for(int i = 0; i < nBooks; i++){
-            if (listBooks[i].getQuote().equals(quote) ) {
-                listBooks[i] = listBooks[nBooks -1];
-                nBooks--;
-                break;
-            }
-        }       
-    }
-    
-    /**
-     * Adding an instance of Borrow the the list of Borrow
-     * @param borrow 
-     */
-    private void addBorrow(Borrow borrow){
-        if(nBorrows < SIZE_BORROWS){
-            listBorrows[nBorrows++] = new Borrow(borrow);
-            borrow.print();
-            System.out.println("\nAdded " + nBorrows + " Borrow(s) Successfully to the Library");
-        }
-    }
-    
-    /**
-     * Delete an instance of Borrow  from the list of Borrowers
-     * @param borrow 
-     */
-    private void delBorrow(Borrow borrow){
-        for (int i = 0; i < nBorrows; i++) {
-            if (listBorrows[i].getSubscriber().getIdNumber().equals(borrow.getSubscriber().getIdNumber()) && 
-                    listBorrows[i].getBook().getQuote().equals(borrow.getBook().getQuote())) {
-                listBorrows[i] = listBorrows[nBorrows - 1];
-                nBorrows--;
-                System.out.println("\nSuccessful Return Process");
-                break;
-            }
-        }        
-    }
+  
+   
+   
     
     /**
      * Search and display all the books of the library with a title containing the 
@@ -125,9 +52,9 @@ public class Library {
         boolean isBookTitlePresent;
         isBookTitlePresent = false;
         
-        for (int i = 0; i < nBooks ; i++) {
-            if(listBooks[i].getTitle().contains(title)){
-                listBooks[i].print();
+        for (int i = 0; i < listBooks.size() ; i++) {
+            if(listBooks.get(i).getTitle().contains(title)){
+                listBooks.get(i).print();
                 isBookTitlePresent = true;
             }
         }
@@ -147,9 +74,9 @@ public class Library {
         boolean isBookQuotePresent;
         isBookQuotePresent = false;
         
-        for (int i = 0; i < nBooks; i++) {
-            if (listBooks[i].getQuote().contains(quote)) {
-                listBooks[i].print();
+        for (int i = 0; i < listBooks.size(); i++) {
+            if (listBooks.get(i).getQuote().contains(quote)) {
+                listBooks.get(i).print();
                 isBookQuotePresent = true;
             }
         }
@@ -185,28 +112,27 @@ public class Library {
         int indexBook = 0;
         int indexSub = 0;
         
-        if(nBorrows == 0){
+        if(listBorrows.isEmpty()){
             /**
              * Loop to check if the book is available -- condition 1. 
              */
-            for (int i = 0; i < nBooks; i++) {
-                if (listBooks[i].getQuote().equals(book_quote)) {
-                    if (listBooks[i].getNAvailable() > 0) {
+            for (int i = 0; i < listBooks.size(); i++) {
+                if (listBooks.get(i).getQuote().equals(book_quote)) {
+                    if (0 < listBooks.get(i).getNAvailable()) {
                         indexBook = i;
                         isBookAvailable = true;
                         break;
                     }
                     break;
                 }
-                
             }
             
             /**
              * Loop to check if the Subscriber meets the required age to read to book -- condition 2.
              */
-            for (int j = 0; j < nSubscribers; j++) {
-                if(listSubs[j].getIdNumber().equals(sub_id_number)){
-                    if (listSubs[j].getAge() >= listBooks[indexBook].getMinReaderAge()) {
+            for (int j = 0; j < listSubs.size(); j++) {
+                if(listSubs.get(j).getIdNumber().equals(sub_id_number)){
+                    if (listSubs.get(j).getAge() >= listBooks.get(indexBook).getMinReaderAge()) {
                         indexSub = j;
                         hasRequiredAge = true;
                         break;
@@ -224,19 +150,20 @@ public class Library {
             
             if (meeting_initial_conditions) {
                 //listBorrows[nBorrows++] = new Borrow(listSubs[indexSub], listBooks[indexBook], borrow_return_date);
-                listBooks[indexBook].nAvailables(listBooks[indexBook].getNAvailable() - 1);
-                Borrow tmp = new Borrow(listSubs[indexSub], listBooks[indexBook], borrow_return_date);
-                addBorrow(tmp);
+                listBooks.get(indexBook).nAvailables(listBooks.get(indexBook).getNAvailable() - 1);
+                Borrow tmp = new Borrow(listSubs.get(indexSub), listBooks.get(indexBook), borrow_return_date);
+                listBorrows.add(tmp);
+                System.out.println("\nAdded " + listBorrows.size() + " Borrow(s) Successfully to the Library");
                 isSuccessful = true;
                 System.out.println("Successful Borrowing Process");
             }
-        }else if (nBorrows > 0) {
+        }else if (0 < listBorrows.size()) {
             /**
              * Loop to check if the book is available -- condition 1. 
              */
-            for (int i = 0; i < nBooks; i++) {
-                if (listBooks[i].getQuote().equals(book_quote)) {
-                    if (listBooks[i].getNAvailable() > 0) {
+            for (int i = 0; i < listBooks.size(); i++) {
+                if (listBooks.get(i).getQuote().equals(book_quote)) {
+                    if (0 < listBooks.get(i).getNAvailable()) {
                         indexBook = i;
                         isBookAvailable = true;
                         break;
@@ -248,9 +175,9 @@ public class Library {
             /**
              * Loop to check if the Subscriber meets the required age to read to book -- condition 2.
              */
-            for (int j = 0; j < nSubscribers; j++) {
-                if(listSubs[j].getIdNumber().equals(sub_id_number)){
-                    if (listSubs[j].getAge() >= listBooks[indexBook].getMinReaderAge()) {
+            for (int j = 0; j < listSubs.size(); j++) {
+                if(listSubs.get(j).getIdNumber().equals(sub_id_number)){
+                    if (listSubs.get(j).getAge() >= listBooks.get(indexBook).getMinReaderAge()) {
                         indexSub = j;
                         hasRequiredAge = true;
                         break;
@@ -267,16 +194,16 @@ public class Library {
             /**
              * Loop to count the number of times a Subscriber occurs in the list of Borrows -- condition 4.
              */
-            for (int k = 0; k < nBorrows; k++) {
-                if (listBorrows[k].getSubscriber().getIdNumber().equals(sub_id_number)) {
+            for (int k = 0; k < listBorrows.size(); k++) {
+                if (listBorrows.get(k).getSubscriber().getIdNumber().equals(sub_id_number)) {
                     nTimesAllowedToBorrow++;
                 }
                 
                 /**
                  * Check if the subscriber has already borrowed the same book
                  */
-                if (listBorrows[k].getSubscriber().getIdNumber().equals(sub_id_number) && 
-                       listBorrows[k].getBook().getQuote().equals(book_quote) ){
+                if (listBorrows.get(k).getSubscriber().getIdNumber().equals(sub_id_number) && 
+                       listBorrows.get(k).getBook().getQuote().equals(book_quote) ){
                     hasSubscriberBorrowedTheBook = true;
                 }
             }
@@ -287,9 +214,10 @@ public class Library {
             
             if (meet_conditions) {
                 //listBorrows[nBorrows++] = new Borrow(listSubs[indexSub], listBooks[indexBook], borrow_return_date);
-                listBooks[indexBook].nAvailables(listBooks[indexBook].getNAvailable() - 1);
-                Borrow tmp = new Borrow(listSubs[indexSub], listBooks[indexBook], borrow_return_date);
-                addBorrow(tmp);
+                listBooks.get(indexBook).nAvailables(listBooks.get(indexBook).getNAvailable() - 1);
+                Borrow tmp = new Borrow(listSubs.get(indexSub), listBooks.get(indexBook), borrow_return_date);
+                listBorrows.add(tmp); 
+                System.out.println("\nAdded " + listBorrows.size() + " Borrow(s) Successfully to the Library");
                 isSuccessful = true;
                 System.out.println("Successful Borrowing Process");                
             }
@@ -313,10 +241,11 @@ public class Library {
         boolean isSuccessful;
         isSuccessful = false;
         
-        for (int i = 0; i < nBorrows; i++) {
-            if (listBorrows[i].getSubscriber().getIdNumber().equals(sub_id_number) && 
-                    listBorrows[i].getBook().getQuote().equals(book_quote)) {
-                delBorrow(listBorrows[i]);
+        for (int i = 0; i < listBorrows.size(); i++) {
+            if (listBorrows.get(i).getSubscriber().getIdNumber().equals(sub_id_number) && 
+                    listBorrows.get(i).getBook().getQuote().equals(book_quote)) {
+                listBorrows.remove(i);
+                // delBorrow(listBorrows[i]);
                 //listBorrows[i] = listBorrows[nBorrows - 1];
                 //nBorrows--;
                 isSuccessful = true;
@@ -324,9 +253,9 @@ public class Library {
                 break;
             }
             
-            for (int j = 0; j < nBooks; j++) {
-                if (listBooks[j].getQuote().equals(book_quote)) {
-                    listBooks[j].setNAvalaible(listBooks[j].getNAvailable() + 1);
+            for (int j = 0; j < listBooks.size(); j++) {
+                if (listBooks.get(j).getQuote().equals(book_quote)) {
+                    listBooks.get(j).setNAvalaible(listBooks.get(j).getNAvailable() + 1);
                     break;
                 }
                 
@@ -341,16 +270,16 @@ public class Library {
      * @param sub_id_number 
      */
     public void infoSubscriber(String sub_id_number){
-        for (int i = 0; i < nBorrows; i++) {
-            if (listBorrows[i].getSubscriber().getIdNumber().equals(sub_id_number)) {
-                listBorrows[i].getSubscriber().print();
+        for (int i = 0; i < listBorrows.size(); i++) {
+            if (listBorrows.get(i).getSubscriber().getIdNumber().equals(sub_id_number)) {
+                listBorrows.get(i).getSubscriber().print();
             }
             break;
         }
         
-        for (int i = 0; i < nBorrows; i++) {
-            if (listBorrows[i].getSubscriber().getIdNumber().equals(sub_id_number)) {
-                listBorrows[i].print();
+        for (int i = 0; i < listBorrows.size(); i++) {
+            if (listBorrows.get(i).getSubscriber().getIdNumber().equals(sub_id_number)) {
+                listBorrows.get(i).print();
             }
         }
     }
@@ -360,24 +289,24 @@ public class Library {
          * Printing the list of Subscribers
          */
         System.out.println("\n// PRINTING THE SUBSCRIBERS OF THE LIBRARY");
-        for (int i = 0; i < nSubscribers; i++) {
-            listSubs[i].print();            
+        for (int i = 0; i < listSubs.size(); i++) {
+            listSubs.get(i).print();            
         }
         
         /**
          * Printing the list of Books
          */
         System.out.println("\n// PRINTING THE BOOKS OF THE LIBRARY");
-        for (int i = 0; i < nBooks; i++) {
-            listBooks[i].print();
+        for (int i = 0; i < listBooks.size(); i++) {
+            listBooks.get(i).print();
         }
         
         /**
          * Printing the list of Borrows
          */
         System.out.println("\n// PRINTING THE BORROWS OF THE LIBRARY");
-        for (int i = 0; i < nBorrows; i++) {
-            listBorrows[i].print();
+        for (int i = 0; i < listBorrows.size(); i++) {
+            listBorrows.get(i).print();
         }
     }
     
